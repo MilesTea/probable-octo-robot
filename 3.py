@@ -13,6 +13,7 @@ class StackOverflow:    # класс был сделан для возможно
         has_more = True
         page = 1
         questions_number = 1
+        max_title_length = 0
 
         while has_more:
             params = {
@@ -27,14 +28,13 @@ class StackOverflow:    # класс был сделан для возможно
             }
 
             page += 1
-            response = requests.get(url='https://api.stackexchange.com/2.3/questions', params=params)
+            response = requests.get(url='https://api.stackexchange.com/2.3/questions', params=params, timeout=5)
             has_more = response.json()['has_more']
 
             if len(response.json()['items']) == 0:
                 print('Not Found')
-                break
+                return
 
-            max_title_length = 0
             for question in response.json()['items']:
                 link = question['link']
                 title = question['title']
